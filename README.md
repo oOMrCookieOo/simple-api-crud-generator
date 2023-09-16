@@ -1,74 +1,65 @@
-# :package_description
+# Laravel API CRUD Generator
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/cookie/simple-crud-generator.svg?style=flat-square)](https://packagist.org/packages/cookie/simple-crud-generator)
 
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+The Laravel CRUD Generator is a command-line tool designed to streamline the process of creating CRUD (Create, Read, Update, Delete) operations for your Laravel-based RESTful API. It automates the generation of actions, routes, and resources, allowing you to quickly set up endpoints for managing your application's data models.
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require mrcookie/simple-api-crud-generator
 ```
 
-You can publish and run the migrations with:
 
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
-```
 
 ## Usage
 
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+php artisan api-crud:generate [App/Models/User or User or user]
+```
+and then you will get this routes with the related actions so you can customize everything to your needs:
+
+```php
+Route::name('users.')->prefix('users')->group(function () {
+    Route::get('', App\Api\Actions\Users\GetUsersAction::class);
+    Route::get('{id}', App\Api\Actions\Users\ShowUserAction::class);
+    Route::put('{id}', App\Api\Actions\Users\UpdateUserAction::class);
+    Route::delete('{id}', App\Api\Actions\Users\DeleteUserAction::class);
+});
 ```
 
-## Testing
 
-```bash
-composer test
+Im using `"spatie/laravel-query-builder": "^5.3"` to handle query and filtering. u can see `"spatie/laravel-query-builder": "^5.3"` [https://spatie.be/docs/laravel-query-builder/v5/introduction](documentation)
+
+
+You can specified `allowedFilters` and `allowedFields` in your model
+
+Example
+```php
+class User extends Model {
+    public static array $allowedFilters = [
+        'name'
+    ];
+    
+    public static array $allowedFields = [
+        'name'
+    ];
+}
+```
+
+## Notes
+
+- this Package Uses [Laravel Actions](https://laravelactions.com) for the crud operations
+
+
+- this Package Uses [Scramble](https://scramble.dedoc.co/usage/getting-started) To Generate API Documentation
+
+Scramble Docs
+```php
+visit [http://localhost:8000/docs/api] to see the generated docs api routes
 ```
 
 ## Changelog
@@ -85,7 +76,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [oOMrCookieOo](https://github.com/oOMrCookieOo)
 - [All Contributors](../../contributors)
 
 ## License

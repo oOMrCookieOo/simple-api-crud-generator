@@ -1,0 +1,37 @@
+<?php
+namespace {{ actionNameSpace }};
+
+use Lorisleiva\Actions\Concerns\AsAction;
+use Lorisleiva\Actions\ActionRequest;
+use Spatie\QueryBuilder\QueryBuilder;
+use {{ resourceImportPath }} ;
+use {{ modelImportPath }} ;
+
+class Show{{ singleModel }}Action  {
+
+    use AsAction;
+
+    public function handle(ActionRequest $request)
+    {
+        $model = {{ model }};
+
+        $query = QueryBuilder::for($model)
+        ->allowedFields($model::$allowedFields ?? [])
+        ->first();
+
+        return {{ resourceClass }}::make($query);
+    }
+
+   public function rules(): array
+    {
+        return [
+
+        ];
+    }
+
+    public function authorize(ActionRequest $request): bool
+    {
+        return true;
+    }
+
+}

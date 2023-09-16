@@ -1,0 +1,40 @@
+<?php
+namespace {{ actionNameSpace }};
+
+use Lorisleiva\Actions\Concerns\AsAction;
+use Lorisleiva\Actions\ActionRequest;
+use Spatie\QueryBuilder\QueryBuilder;
+use MrCookie\SimpleApiCrudGenerator\Traits\HttpResponse;
+use {{ modelImportPath }} ;
+
+class Update{{ model }}Action  {
+
+    use AsAction;
+     use HttpResponse;
+
+    public function handle(ActionRequest $request,$id)
+    {
+        $model = {{ model }}::find($id);
+
+        if (!$model) return $this->sendNotFoundResponse();
+
+        $model->fill($request->validated());
+
+        $model->save();
+
+        return $this->sendSuccessResponse($model, "Successfully Update Resource");
+    }
+
+   public function rules(): array
+    {
+        return [
+
+        ];
+    }
+
+    public function authorize(ActionRequest $request): bool
+    {
+        return true;
+    }
+
+}
